@@ -27,17 +27,17 @@ function DashboardView() {
     const [loading, setLoading] = useState(true)
 
     useEffect(() => {
-        if (auth.isAuthenticated) {
+        if (auth.isAuthenticated && auth.accessToken) {
             fetchStats()
         }
-    }, [auth.isAuthenticated])
+    }, [auth.isAuthenticated, auth.accessToken])
 
     const fetchStats = async () => {
         try {
             setLoading(true)
             const [playerData, globalData] = await Promise.all([
-                getPlayerStats(auth.id),
-                getGlobalStats(),
+                getPlayerStats(auth.id, auth.accessToken),
+                getGlobalStats(auth.accessToken),
             ])
             setPlayerStats(playerData.data)
             setGlobalStats(globalData.data)
